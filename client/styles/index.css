@@ -1,0 +1,54 @@
+/* Tailwind entry, base styles and the few shared component classes. */
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", Inter, system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* Visible keyboard focus everywhere (N6). */
+:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@layer components {
+  .link {
+    color: #1d4ed8;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .link:hover {
+    color: #1e3a8a;
+  }
+  .btn {
+    min-height: 2.75rem;
+    border-radius: 0.75rem;
+    padding: 0 1rem;
+    font-weight: 600;
+  }
+  .btn-primary {
+    background: #1d4ed8;
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: #1e40af;
+  }
+  .btn-primary:disabled {
+    background: #94a3b8;
+    color: #0f172a;
+    cursor: not-allowed;
+  }
+  .btn-secondary {
+    border: 1px solid #94a3b8;
+    background: #fff;
+    color: #0f172a;
+  }
+}

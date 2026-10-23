@@ -1,0 +1,39 @@
+# Cloudflare Worker config.
+# Top level = local development (wrangler dev): local KV + Ollama, no Cloudflare calls (AI_PROVIDER from .dev.vars).
+# [env.production] = the deployed Worker (npm run deploy:api): Workers AI + Vectorize + KV.
+name = "my-ai-persona"
+main = "server/main.ts"
+compatibility_date = "2026-10-17"
+
+# Local KV in wrangler dev: development vectors (localVectorStore) and rate-limit counters.
+[[kv_namespaces]]
+binding = "KV"
+
+[env.production]
+name = "my-ai-persona"
+workers_dev = true
+
+[env.production.vars]
+AI_PROVIDER = "cloudflare"
+ALLOWED_ORIGINS = "https://troyyu527.github.io"
+CHAT_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+# Follow-up rewrite needs only a short query: the small, fast model (Step 5).
+REWRITE_MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8"
+RATE_LIMIT_PER_HOUR = "20"
+# Workers AI bge scores ~0.04 higher than the local GGUF model: 0.55 keeps coverage and drops off-topic questions.
+THRESHOLD = "0.55"
+
+[env.production.ai]
+binding = "AI"
+
+[[env.production.vectorize]]
+binding = "VECTORIZE"
+index_name = "my-ai-persona"
+
+# Rate-limit counters and the Vectorize id list.
+[[env.production.kv_namespaces]]
+binding = "KV"
+id = "cf2671617bdf465da95e1f81d6bf8029"
+
+[env.production.observability]
+enabled = true
